@@ -4,7 +4,7 @@
     @@include('../layouts/head-page-meta.html', {'title': 'Login'}) @@include('../layouts/head-css.html')
   </head>
 
-  <body @@bodySetup styles="font-family: iFoodRCTextos, sans-serif">
+  <body @@bodySetup>
     @@include('../layouts/loader.html')
     <div class="auth-main v1 bg-light-primary">
       <div class="auth-wrapper">
@@ -12,7 +12,7 @@
           <div class="card my-5">
             <div class="card-body">
               <div class="text-center">
-                <img src="../assets/images/ifood-logo-0.png" alt="images" class="img-fluid mb-4" />
+                <img src="../assets/images/ifood-logo-0.png" alt="images" class="img-fluid mb-4" style="height: 50px"/>
                 <h4 class="f-w-500 mb-1">Bem vindo ao Backoffice do iFood!</h4>
                 <p class="mb-4">Faça Login utilizando seu email e senha.</p>
               </div>
@@ -30,7 +30,7 @@
                 <a href="../pages/forgot-password-v1.html"><h6 class="f-w-400 mb-0">Esqueceu a senha?</h6></a>
               </div>
               <div class="d-grid mt-4">
-                <button type="button" class="btn btn-primary">Login</button>
+                <button type="button" class="btn btn-outline-primary">Login</button>
               </div>
               <div class="saprator my-3">
                 <span>Ou continue com</span>
