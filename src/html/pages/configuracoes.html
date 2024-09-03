@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    @@include('../layouts/head-page-meta.html', {'title': 'Settings'})
+    <link rel="stylesheet" href="../assets/css/plugins/dropzone.min.css" />
+    @@include('../layouts/head-css.html')
+  </head>
+
+  <body @@bodySetup>
+    @@include('../layouts/layout-vertical.html')
+    <div class="pc-container">
+      <div class="pc-content">
+        @@include('../layouts/breadcrumb.html', {'breadcrumb-item': 'Pages', 'breadcrumb-item-active': 'Settings'})
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <h5>--</h5>
+              </div>
+              <div class="card-body">
+                <div class="mb-3 row">
+                  <label class="col-form-label col-sm-3 text-sm-end">--</label>
+                  <div class="col-lg-6 col-sm-7">
+                    <input type="text" class="form-control" placeholder="" />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-form-label col-sm-3 text-sm-end">--</label>
+                  <div class="col-lg-6 col-sm-7">
+                    <input type="text" class="form-control" placeholder="--" />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-form-label col-sm-3 text-sm-end">--</label>
+                  <div class="col-lg-6 col-sm-7">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="--" />
+                      <button class="btn btn-primary" type="button"><i class="ti ti-copy align-middle"></i> --</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-form-label col-sm-3 text-sm-end">--</label>
+                  <div class="col-lg-6 col-sm-7">
+                    <input type="text" class="form-control" placeholder="--" />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-form-label col-sm-3 text-sm-end"
+                    >Favicon
+                    <span
+                      class="link-secondary"
+                      data-bs-toggle="tooltip"
+                      data-bs-html="true"
+                      data-bs-title='<span class="mb-2 d-block">---</span><span class="d-block">--</span>'
+                    >
+                      <i class="ph ph-question"></i>
+                    </span>
+                  </label>
+                  <div class="col-lg-6 col-sm-7">
+                    <form action="../assets/json/file-upload.php" class="dropzone">
+                      <div class="fallback">
+                        <input name="file" type="file" multiple />
+                      </div>
+                    </form>
+                    <a href="#" class="link-primary text-sm">--</a>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-form-label col-sm-3 text-sm-end"
+                    >--
+                    <span
+                      class="link-secondary"
+                      data-bs-toggle="tooltip"
+                      data-bs-html="true"
+                      data-bs-title='<span class="mb-2 d-block">--</span><span class="d-block">--</span>'
+                    >
+                      <i class="ph ph-question"></i>
+                    </span>
+                  </label>
+                  <div class="col-lg-6 col-sm-7">
+                    <form action="../assets/json/file-upload.php" class="dropzone">
+                      <div class="fallback">
+                        <input name="file" type="file" multiple />
+                      </div>
+                    </form>
+                    <a href="#" class="link-primary text-smin">--</a>
+                  </div>
+                </div>
+                <div class="row mb-0">
+                  <span class="col-form-label col-sm-3 text-sm-end"></span>
+                  <div class="col-lg-6 col-sm-7">
+                    <button class="btn btn-primary me-2">--</button>
+                    <button class="btn btn-outline-secondary">--</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
+    <script src="../assets/js/plugins/dropzone-amd-module.min.js"></script>
+    @@include('../layouts/customizer.html')
+  </body>
+</html>
