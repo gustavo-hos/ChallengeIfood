@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-br">
+  <head> @@include('../layouts/head-page-meta.html', {'title': 'Dasbboard'})
+    <link rel="stylesheet" href="../assets/css/plugins/dataTables.bootstrap5.min.css" /> @@include('../layouts/head-css.html')
+  </head>
+  <body @@bodySetup> @@include('../layouts/layout-vertical.html') <div class="pc-container">
+      <div class="pc-content">
+        <div class="d-flex align-items-center m-3">
+          <span class="me-3">Período:</span>
+          <div class="btn-group me-3" role="group" aria-label="Período">
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle me-2 shadow-sm">1D</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle me-2 shadow-sm">3D</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle me-2 shadow-sm">7D</button>
+          </div>
+          <div class="d-flex align-items-center ms-3">
+            <label for="customRange" class="me-2">Personalizado:</label>
+            <label for="customRange" class="me-2">De</label>
+            <input type="text" id="customRange" class="form-control form-control-sm datepicker-input shadow-sm me-2" placeholder="DD/MM/YYYY" style="width: 200px;">
+            <label for="customRange" class="me-2">Até</label>
+            <input type="text" id="customRange1" class="form-control form-control-sm datepicker-input shadow-sm" placeholder="DD/MM/YYYY" style="width: 200px;">
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 col-xl-3"> @@include('../layouts/component/component-card-info.html', {'bg-color': 'bg-grd-dark', 'name': 'total-entrada', 'title': 'Total Entrada', 'icon': 'ti ti-currency-dollar fs-4', 'value': 'R$ 7.938,32'}) </div>
+          <div class="col-md-6 col-xl-3"> @@include('../layouts/component/component-card-info.html', {'bg-color': 'bg-grd-dark', 'name': 'total-receber', 'title': 'Total a Receber', 'icon': 'feather icon-repeat', 'value': 'R$ 13.254,59'}) </div>
+          <div class="col-md-6 col-xl-3"> @@include('../layouts/component/component-card-info.html', {'bg-color': 'bg-grd-dark', 'name': 'total-saida', 'title': 'Total Saida', 'icon': 'ti ti-caret-down fs-4', 'value': 'R$ 5.450,00'}) </div>
+          <div class="col-md-6 col-xl-3"> @@include('../layouts/component/component-card-info.html', {'bg-color': 'bg-grd-dark', 'name': 'custo-fixo', 'title': 'Custos Fixos', 'icon': 'ti ti-receipt-tax fs-4', 'value': 'R$ 18.370,70'}) </div>
+          <div class="col-md-12 col-xl-6">
+            <div class="card">
+              <div class="card-header">
+                <h5>Receita por Produto</h5>
+              </div>
+              <div class="card-body">
+                <div id="receita-por-produto-graph"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 col-xxl-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="my-n4 text-center mx-auto">
+                  <div id="margem-lucro-chart"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <h5>Ultimos Pedidos</h5>
+              </div>
+              <div class="card-body">
+                <div class="dt-responsive">
+                  <table id="tabela-ultimos-pedidos" class="table table-striped table-bordered nowrap">
+                    <tr>
+                      <th>Cod.</th>
+                      <th>Origem</th>
+                      <th>Tipo</th>
+                      <th>Qtd. Itens</th>
+                      <th>Valor Final</th>
+                      <th>Status</th>
+                      <th>Abertura</th>
+                      <th>Tempo</th>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <h5>Produtos Vendidos</h5>
+              </div>
+              <div class="card-body">
+                <div class="dt-responsive">
+                  <table id="tabela-produtos-vendidos" class="table table-striped table-bordered nowrap">
+                    <tr>
+                      <th>Cod.</th>
+                      <th>Nome</th>
+                      <th>Categoria</th>
+                      <th>Preco de Custo</th>
+                      <th>Preco de Venda</th>
+                      <th>Qtd.</th>
+                      <th>Valor Vendido</th>
+                      <th>Lucro</th>
+                      <th>Margem de Lucro</th>
+                    </tr>
+                  </table>
+                </div>
+                <ul class="list-group list-group-flush d-flex flex-row justify-content-around">
+                  <li class="list-group-item border-0 d-flex align-items-center">
+                    <span class="badge bg-success" style="width: 20px; height: 20px; display: inline-block;"></span>
+                    <span class="ms-2">Classe A - Alta Margem (Acima de 50%)</span>
+                  </li>
+                  <li class="list-group-item border-0 d-flex align-items-center">
+                    <span class="badge bg-warning" style="width: 20px; height: 20px; display: inline-block;"></span>
+                    <span class="ms-2">Classe B - Margem Média (30% - 50%)</span>
+                  </li>
+                  <li class="list-group-item border-0 d-flex align-items-center">
+                    <span class="badge bg-danger" style="width: 20px; height: 20px; display: inline-block;"></span>
+                    <span class="ms-2">Classe C - Baixa Margem (Abaixo de 30%)</span>
+                  </li>
+                </ul>
+                <small>* Margem ABC representa as faixas de participacao nos lucros.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../assets/js/plugins/apexcharts.min.js"></script>
+    <script src="../assets/js/pages/dashboard.bundle.js"></script>
+    <script src="../assets/js/plugins/dataTables.min.js"></script>
+    <script src="../assets/js/plugins/dataTables.bootstrap5.min.js"></script> @@include('../layouts/footer-js.html')
+  </body>
+</html>

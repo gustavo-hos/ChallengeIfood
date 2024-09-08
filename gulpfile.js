@@ -1,44 +1,49 @@
-let gulp = require('gulp');
-let sass = require('gulp-sass')(require('sass'));
-let del = require('del');
-let sourcemaps = require('gulp-sourcemaps');
-let uglify = require('gulp-uglify');
-let cssmin = require('gulp-cssmin');
-let merge = require('merge-stream');
-let babel = require('gulp-babel');
-let npmlodash = require('lodash');
-let smushit = require('gulp-smushit');
-let autoprefixer = require('gulp-autoprefixer');
-let fileinclude = require('gulp-file-include');
-let browsersync = require('browser-sync');
-let htmlmin = require('gulp-htmlmin');
-let replace = require('gulp-replace');
+var gulp = require('gulp');
+var sass = require('gulp-sass')(require('sass'));
+var del = require('del');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
+var cssmin = require('gulp-cssmin');
+var merge = require('merge-stream');
+var babel = require('gulp-babel');
+var npmlodash = require('lodash');
+var smushit = require('gulp-smushit');
+var autoprefixer = require('gulp-autoprefixer');
+var fileinclude = require('gulp-file-include');
+var browsersync = require('browser-sync');
+var htmlmin = require('gulp-htmlmin');
+var replace = require('gulp-replace');
+
+var webpack = require('webpack');
+var webpackStream = require('webpack-stream');
+var webpackConfig = require('./webpack.config.js');
+
 const { parallel } = require('gulp');
 
-const caption_show = 'true';
+const caption_show = 'true'
 const dark_navbar = 'false';
 const preset_theme = 'preset-1';
 const header_theme = 'header-1';
 const dark_layout = 'false'; 
 const rtl_layout = 'false';
-const box_container = 'false'; 
-const version = 'v2.1.0';
+const box_container = 'false';
+const version = 'v1.0';
 
 if (rtl_layout == 'true') {
-  let rtltemp = 'rtl';
+  var rtltemp = 'rtl';
 } else {
-  let rtltemp = 'ltr';
+  var rtltemp = 'ltr';
 }
 
 if (dark_layout == 'true') {
-  let darklayouttemp = 'dark';
+  var darklayouttemp = 'dark';
 } else {
-  let darklayouttemp = 'light';
+  var darklayouttemp = 'light';
 }
 if (dark_navbar == 'true') {
-  let darknavbartemp = 'dark';
+  var darknavbartemp = 'dark';
 } else {
-  let darknavbartemp = 'light';
+  var darknavbartemp = 'light';
 }
 
 const layout = {
@@ -95,6 +100,7 @@ gulp.task('cleandist', function (callback) {
 });
 
 gulp.task('sass', function () {
+
   return gulp
     .src(path.src.css)
     .pipe(sourcemaps.init())
@@ -105,7 +111,7 @@ gulp.task('sass', function () {
 });
 
 gulp.task('build-node-modules', function () {
-  let required_libs = {
+  var required_libs = {
     js: [
       'node_modules/bootstrap/dist/js/bootstrap.min.js',
       'node_modules/@popperjs/core/dist/umd/popper.min.js',
@@ -209,7 +215,6 @@ gulp.task('build-node-modules', function () {
       'node_modules/swiper/swiper-bundle.css'
     ]
   };
-
   npmlodash(required_libs).forEach(function (assets, type) {
     if (type == 'css') {
       gulp.src(assets).pipe(gulp.dest('dist/assets/css/plugins'));
@@ -218,35 +223,13 @@ gulp.task('build-node-modules', function () {
     }
   });
 
-  required_libs = {
-    classic: ['node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js'],
-    inline: ['node_modules/@ckeditor/ckeditor5-build-inline/build/ckeditor.js'],
-    balloon: ['node_modules/@ckeditor/ckeditor5-build-balloon/build/ckeditor.js'],
-    document: ['node_modules/@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js']
-  };
+  var cpyassets = gulp.src(['src/assets/**/*.*', '!src/assets/scss/**/*.*']).pipe(gulp.dest('dist/assets'));
 
-  npmlodash(required_libs).forEach(function (assets, type) {
-    if (type == 'classic') {
-      gulp.src(assets).pipe(gulp.dest('dist/assets/js/plugins/ckeditor/classic'));
-    }
-    if (type == 'inline') {
-      gulp.src(assets).pipe(gulp.dest('dist/assets/js/plugins/ckeditor/inline'));
-    }
-    if (type == 'balloon') {
-      gulp.src(assets).pipe(gulp.dest('dist/assets/js/plugins/ckeditor/balloon'));
-    }
-    if (type == 'document') {
-      gulp.src(assets).pipe(gulp.dest('dist/assets/js/plugins/ckeditor/document'));
-    }
-  });
+  var modules = gulp.src(['login.js', 'dashboard.js', 'configuracoes.js', 'esqueci-a-senha.js', 'estoque.js', 'relatorios.js', 'pagamentos.js'].map(file => `src/assets/js/pages/${file}`))
+  .pipe(webpackStream(webpackConfig, webpack))
+  .pipe(gulp.dest(path.destination.pagesjs));
 
-  let cpyassets = gulp.src(['src/assets/**/*.*', '!src/assets/scss/**/*.*']).pipe(gulp.dest('dist/assets'));
-
-  let cpytinymceassets = gulp.src(['node_modules/tinymce/**/*.*']).pipe(gulp.dest('dist/assets/js/plugins/tinymce'));
-
-  let cpytrumbowygassets = gulp.src(['node_modules/trumbowyg/dist/**/*.*']).pipe(gulp.dest('dist/assets/js/plugins/trumbowyg'));
-
-  return merge(cpyassets, cpytinymceassets, cpytrumbowygassets);
+  return merge(cpyassets, modules);
 });
 
 gulp.task('build-html', function () {
@@ -264,9 +247,9 @@ gulp.task('build-html', function () {
 });
 
 gulp.task('build-js', function () {
-  let layoutjs = gulp.src(path.src.layoutjs).pipe(gulp.dest(path.destination.layoutjs));
+  var layoutjs = gulp.src(path.src.layoutjs).pipe(gulp.dest(path.destination.layoutjs));
 
-  let pagesjs = gulp.src(path.src.pagesjs).pipe(gulp.dest(path.destination.pagesjs));
+  var pagesjs = gulp.src(path.src.pagesjs).pipe(gulp.dest(path.destination.pagesjs));
 
   return merge(layoutjs, pagesjs);
 });
@@ -286,9 +269,9 @@ gulp.task('min-css', function () {
 });
 
 gulp.task('min-js', function () {
-  let layoutjs = gulp.src(path.src.layoutjs).pipe(uglify()).pipe(gulp.dest(path.destination.layoutjs));
+  var layoutjs = gulp.src(path.src.layoutjs).pipe(uglify()).pipe(gulp.dest(path.destination.layoutjs));
 
-  let pagesjs = gulp.src(path.src.pagesjs).pipe(babel()).pipe(uglify()).pipe(gulp.dest(path.destination.pagesjs));
+  var pagesjs = gulp.src(path.src.pagesjs).pipe(babel()).pipe(uglify()).pipe(gulp.dest(path.destination.pagesjs));
 
   return merge(layoutjs, pagesjs);
 });

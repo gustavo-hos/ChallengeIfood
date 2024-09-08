@@ -1,36 +1,78 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     @@include('../layouts/head-page-meta.html', {'title': 'Login'}) @@include('../layouts/head-css.html')
+
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+      }
+
+      .auth-main {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      #falling-food-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .falling-food {
+        position: absolute;
+        top: -100px;
+        pointer-events: none;
+        transform-origin: center;
+      }
+    </style>
   </head>
 
   <body @@bodySetup>
-    @@include('../layouts/loader.html')
     <div class="auth-main v1 bg-light-primary">
+      <div id="falling-food-container"></div>
       <div class="auth-wrapper">
         <div class="auth-form">
           <div class="card my-5">
             <div class="card-body">
               <div class="text-center">
-                <img src="../assets/images/ifood-logo-0.png" alt="images" class="img-fluid mb-4" style="height: 50px"/>
+                <img src="../assets/images/ifood-logo-0.png" alt="images" class="img-fluid mb-4" style="height: 50px" />
                 <h4 class="f-w-500 mb-1">Bem vindo ao Backoffice do iFood!</h4>
                 <p class="mb-4">Faça Login utilizando seu email e senha.</p>
               </div>
               <div class="mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="Endereço de Email" />
+                <div class="d-flex align-items-center">
+                  <i class="ti ti-user fs-2 me-2"></i>
+                  <input type="email" class="form-control" id="email" placeholder="Endereço de Email" />
+                </div>
               </div>
               <div class="mb-3">
-                <input type="password" class="form-control" id="floatingInput1" placeholder="Senha" />
+                <div class="d-flex align-items-center">
+                  <i class="ti ti-lock fs-2 me-2"></i>
+                  <input type="password" class="form-control" id="password" placeholder="Senha" />
+                </div>
               </div>
               <div class="d-flex mt-1 justify-content-between align-items-center">
                 <div class="form-check">
                   <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
                   <label class="form-check-label text-muted" for="customCheckc1">Lembrar de mim?</label>
                 </div>
-                <a href="../pages/forgot-password-v1.html"><h6 class="f-w-400 mb-0">Esqueceu a senha?</h6></a>
+                <a href="../pages/esqueci-a-senha.html"><h6 class="f-w-400 mb-0">Esqueceu a senha?</h6></a>
               </div>
               <div class="d-grid mt-4">
-                <button type="button" class="btn btn-outline-primary">Login</button>
+                <button id="login" type="button" class="btn btn-outline-primary">
+                  <span class="spinner-border spinner-border-sm mr-2 d-none" role="status" aria-hidden="true"></span>
+                  Login</button
+                >
               </div>
               <div class="saprator my-3">
                 <span>Ou continue com</span>
@@ -43,6 +85,8 @@
         </div>
       </div>
     </div>
-    @@include('../layouts/footer-js.html') @@include('../layouts/customizer.html')
+
+    <script type="module" src="../assets/js/pages/login.bundle.js"></script>
+    @@include('../layouts/footer-js.html')
   </body>
 </html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-br">
+  <head> @@include('../layouts/head-page-meta.html', {'title': 'Pagamentos'})
+    <link rel="stylesheet" href="../assets/css/plugins/dataTables.bootstrap5.min.css" /> @@include('../layouts/head-css.html')
+  </head>
+  <body @@bodySetup> @@include('../layouts/layout-vertical.html')
+
+    <div class="pc-container">
+
+      <div class="pc-content">
+        <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <div class="d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Vendas por Dia</h5>
+                <input type="date" id="vendas-dia-datepicker" class="form-control form-control-sm w-auto border-0 shadow-smslack">
+              </div>
+              <div class="toolbar btn-group">
+                <button id="1d" class="btn btn-sm btn-outline-primary d-none">1D</button>
+                <button id="1m" class="btn btn-sm btn-outline-primary active">1M</button>
+                <button id="6m" class="btn btn-sm btn-outline-primary">6M</button>
+                <button id="1a" class="btn btn-sm btn-outline-primary">1A</button>
+                <button id="tudo" class="btn btn-sm btn-outline-primary">TUDO</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="my-n4 text-center mx-auto">
+                <div id="vendas-chart"></div>
+              </div>
+              <ul class="list-group list-group-flush d-flex flex-row justify-content-around mt-2">
+                <li class="list-group-item border-0 d-flex flex-column align-items-center">
+                  <span id="total-pedidos" class="ms-2 fs-3"></span>
+                  <span class="text-muted fs-6">Qtd. de Pedidos</span>
+                </li>
+                <li class="list-group-item border-0 d-flex flex-column align-items-center">
+                  <span id="total-recebido" class="ms-2 fs-3"></span>
+                  <span class="text-muted fs-6">Valor Total Recebido</span>
+                </li>
+                <li class="list-group-item border-0 d-flex flex-column align-items-center">
+                  <span id="valor-medio" class="ms-2 fs-3"></span>
+                  <span class="text-muted fs-6">Valor Medio</span>
+                </li>
+                <li class="list-group-item border-0 d-flex flex-column align-items-center">
+                  <span id="total-itens" class="ms-2 fs-3"></span>
+                  <span class="text-muted fs-6">Total de Itens</span>
+                </li>
+                <li class="list-group-item border-0 d-flex flex-column align-items-center">
+                  <span id="media-itens" class="ms-2 fs-3"></span>
+                  <span class="text-muted fs-6">Media de Itens</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Pedidos por Dia da Semana</h5>
+            </div>
+            <div class="card-body">
+              <div class="my-n4 text-center mx-auto">
+                <div id="pedidos-dia-semana"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Pedidos por Hora do Dia</h5>
+            </div>
+            <div class="card-body">
+              <div class="my-n4 text-center mx-auto">
+                <div id="pedidos-hora-dia"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+          <div class="row">
+        <div class="col-md-12 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Pedidos por Tipo</h5>
+            </div>
+            <div class="card-body">
+              <div class="my-n4 text-center mx-auto">
+                <div id="pedidos-tipo"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Pedidos por Origem</h5>
+            </div>
+            <div class="card-body">
+              <div class="my-n4 text-center mx-auto">
+                <div id="pedidos-origem"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <h5>Produtos Vendidos</h5>
+              </div>
+              <div class="card-body">
+                <div class="dt-responsive">
+                  <table id="tabela-produtos-vendidos" class="table table-striped table-bordered nowrap">
+                    <tr>
+                      <th>Cod.</th>
+                      <th>Nome</th>
+                      <th>Categoria</th>
+                      <th>Preco de Custo</th>
+                      <th>Preco de Venda</th>
+                      <th>Qtd.</th>
+                      <th>Valor Vendido</th>
+                      <th>Lucro</th>
+                      <th>Margem de Lucro</th>
+                    </tr>
+                  </table>
+                </div>
+                <ul class="list-group list-group-flush d-flex flex-row justify-content-around">
+                  <li class="list-group-item border-0 d-flex align-items-center">
+                    <span class="badge bg-success" style="width: 20px; height: 20px; display: inline-block;"></span>
+                    <span class="ms-2">Classe A - Alta Margem (Acima de 50%)</span>
+                  </li>
+                  <li class="list-group-item border-0 d-flex align-items-center">
+                    <span class="badge bg-warning" style="width: 20px; height: 20px; display: inline-block;"></span>
+                    <span class="ms-2">Classe B - Margem Média (30% - 50%)</span>
+                  </li>
+                  <li class="list-group-item border-0 d-flex align-items-center">
+                    <span class="badge bg-danger" style="width: 20px; height: 20px; display: inline-block;"></span>
+                    <span class="ms-2">Classe C - Baixa Margem (Abaixo de 30%)</span>
+                  </li>
+                </ul>
+                <small>* Margem ABC representa as faixas de participacao nos lucros.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="../assets/js/plugins/apexcharts.min.js"></script>
+    <script src="../assets/js/pages/pagamentos.bundle.js"></script>
+    <script src="../assets/js/plugins/dataTables.min.js"></script>
+    <script src="../assets/js/plugins/dataTables.bootstrap5.min.js"></script> @@include('../layouts/footer-js.html')
+  </body>
+</html>
