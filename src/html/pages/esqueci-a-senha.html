@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-br">
+
+  <head>
+    @@include('../layouts/head-page-meta.html', {'title': 'Forgot password'}) @@include('../layouts/head-css.html')
+  </head>
+
+  <body @@bodySetup>
+    <div class="auth-main v1 bg-grd-light-primary">
+      <div class="auth-wrapper">
+        <div class="auth-form">
+          <div class="card my-5">
+            <div class="card-body">
+              <div class="text-center">
+                <img src="../assets/images/ifood-logo-0.png" alt="images" class="img-fluid mb-4" style="height: 50px"/>
+                <h4 class="f-w-500 mb-1">Esqueci a Senha</h4>
+                <p class="mb-4">Voltar para <a href="../pages/login.html" class="link-primary ms-1">Login</a></p>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Endereço de Email</label>
+                <input type="email" class="form-control" id="floatingInput" placeholder="Endereço de Email" />
+              </div>
+              <div class="d-grid mt-3">
+                <button id="forgot" type="button" class="btn btn-outline-primary">Enviar email de recuperação</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../assets/js/pages/esqueci-a-senha.bundle.js"></script>
+    @@include('../layouts/footer-js.html')
+  </body>
+</html>
