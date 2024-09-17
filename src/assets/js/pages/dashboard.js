@@ -1,10 +1,12 @@
 import 'reflect-metadata';
-import $ from 'jquery';
 import container from '../inversify/inversify.config';
 import TYPES from '../inversify/types';
-import { DTTABLE_TEXTOS, valueToPercent } from '../util/util';
+
+import $ from 'jquery';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-bs5';
+import { DTTABLE_TEXTOS, valueToPercent } from '../util/util';
+
 import { PRODUTOS_VENDIDOS, ULTIMOS_PEDIDOS } from '../mock-data';
 
 const _toasterService = container.get(TYPES.ToasterService);

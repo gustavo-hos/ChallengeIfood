@@ -1,17 +1,75 @@
 <!doctype html>
 <html lang="pt-br">
-  <head> @@include('../layouts/head-page-meta.html', {'title': 'Relatórios'})
-    <link rel="stylesheet" href="../assets/css/plugins/dataTables.bootstrap5.min.css" /> @@include('../layouts/head-css.html')
-  </head>
-  <body @@bodySetup> @@include('../layouts/layout-vertical.html') <div class="pc-container">
-    
-    <div class="pc-content">
-        
-    </div>
+<head> @@include('../layouts/head-page-meta.html', {'title': 'Relatórios'})
+  <link rel="stylesheet" href="../assets/css/plugins/dataTables.bootstrap5.min.css" />
+  @@include('../layouts/head-css.html')
+</head>
+<body @@bodySetup>
 
-    <script src="../assets/js/plugins/apexcharts.min.js"></script>
-    <script src="../assets/js/pages/relatorios.bundle.js"></script>
-    <script src="../assets/js/plugins/dataTables.min.js"></script>
-    <script src="../assets/js/plugins/dataTables.bootstrap5.min.js"></script> @@include('../layouts/footer-js.html')
-  </body>
+@@include('../layouts/layout-vertical.html')
+
+<div class="pc-container">
+
+  <div class="pc-content">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>Relatórios Disponíveis</h5>
+            <button class="btn btn-darkred btn-sm shadow-sm">
+              <i class="ph ph-plus"></i> Novo Relatório
+            </button>
+          </div>
+          <div class="card-body">
+            <table id="tabela-relatorios" class="table table-striped table-bordered">
+              <thead>
+              <tr>
+                <th>Nome do Relatório</th>
+                <th>Formato</th>
+                <th>Data de Criação</th>
+                <th>Última Geração</th>
+                <th>Ações</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalGerarRelatorio" tabindex="-1"
+       aria-labelledby="modalGerarRelatorioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalGerarRelatorioLabel">Gerar Relatório</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="periodo" class="form-label">Período para Geração</label>
+              <input type="date" class="form-control" id="periodo">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary">Gerar Relatório</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="../assets/js/plugins/apexcharts.min.js"></script>
+<script src="../assets/js/plugins/dataTables.min.js"></script>
+<script src="../assets/js/plugins/dataTables.bootstrap5.min.js"></script>
+@@include('../layouts/footer-js.html')
+<script src="../assets/js/pages/relatorios.bundle.js"></script>
+</body>
 </html>

@@ -72,6 +72,7 @@
     "notifier-js": "^1.0.0",
     "nouislider": "^15.7.1",
     "npm-check-updates": "^16.14.15",
+    "overlayscrollbars": "^2.10.0",
     "pdfmake": "^0.2.9",
     "peity-vanilla": "^0.0.8",
     "prismjs": "^1.29.0",

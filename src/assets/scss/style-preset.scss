@@ -11,27 +11,29 @@
 @each $name, $value in $preset-colors {
   [data-pc-preset='#{$name}'] {
     $pc-primary: map-get($value, 'primary');
+    $pc-darkred: map-get($value, 'darkred');
     $color-rgb: to-rgb($pc-primary);
     $pc-primary-light: tint-color($pc-primary, 90%);
-    --pc-sidebar-active-color: #{$pc-primary};
+    --pc-sidebar-active-color: #ea1d2c;
     --bs-blue: #{$pc-primary};
     --bs-primary: #{$pc-primary};
+    --bs-darkred: #{$pc-darkred};
     --bs-primary-rgb: #{$color-rgb};
     --bs-primary-light: #{$pc-primary-light};
     --bs-link-color: #{$pc-primary};
     --bs-link-color-rgb: #{$color-rgb};
-    --bs-link-hover-color: #{shift-color($pc-primary, $link-shade-percentage)};
-    --bs-link-hover-color-rgb: to-rgb(shift-color($pc-primary, $link-shade-percentage));
+    --bs-link-hover-color: #{shift-color(#ea1d2c, $link-shade-percentage)};
+    --bs-link-hover-color-rgb: to-rgb(shift-color(#ea1d2c, $link-shade-percentage));
 
-    --dt-row-selected: #{to-rgb($pc-primary)};
+    --dt-row-selected: #{to-rgb(#ea1d2c)};
 
     .bg-light-primary {
       background: $pc-primary-light;
-      color: $pc-primary;
+      color: #ea1d2c;
     }
 
     .bg-grd-primary {
-      background: linear-gradient(45deg, $pc-primary, lighten($pc-primary, 10%));
+      background: linear-gradient(45deg, #ea1d2c, lighten(#ea1d2c, 10%));
     }
 
     .link-primary {
@@ -97,19 +99,19 @@
     }
 
     .nav {
-      --bs-nav-link-hover-color: #{shift-color($pc-primary, $link-shade-percentage)};
+      --bs-nav-link-hover-color: #{shift-color(#ea1d2c, $link-shade-percentage)};
     }
 
     .nav-pills {
-      --bs-nav-pills-link-active-bg: #{$pc-primary};
+      --bs-nav-pills-link-active-bg: #ea1d2c;
     }
 
     .pagination {
-      --bs-pagination-hover-color: #{shift-color($pc-primary, $link-shade-percentage)};
-      --bs-pagination-focus-color: #{shift-color($pc-primary, $link-shade-percentage)};
-      --bs-pagination-focus-box-shadow: 0 0 0 #{$input-btn-focus-width} #{rgba($pc-primary, $input-btn-focus-color-opacity)};
-      --bs-pagination-active-bg: #{$pc-primary};
-      --bs-pagination-active-border-color: #{$pc-primary};
+      --bs-pagination-hover-color: #{shift-color(#ea1d2c, $link-shade-percentage)};
+      --bs-pagination-focus-color: #{shift-color(#ea1d2c, $link-shade-percentage)};
+      --bs-pagination-focus-box-shadow: 0 0 0 #{$input-btn-focus-width} #{rgba(#ea1d2c, $input-btn-focus-color-opacity)};
+      --bs-pagination-active-bg: #ea1d2c;
+      --bs-pagination-active-border-color: #ea1d2c;
     }
 
     .progress {

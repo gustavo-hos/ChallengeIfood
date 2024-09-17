@@ -41,15 +41,8 @@
 @import 'node_modules/bootstrap/scss/placeholders';
 @import 'node_modules/bootstrap/scss/helpers';
 
-[data-pc-direction='ltr'] {
-  @import 'node_modules/bootstrap/scss/utilities';
-  @import 'node_modules/bootstrap/scss/utilities/api';
-}
-
-[data-pc-direction='rtl'] {
-  @import 'themes/layouts/style-rtl-utility';
-  @import 'node_modules/bootstrap/scss/utilities/api';
-}
+@import 'node_modules/bootstrap/scss/utilities';
+@import 'node_modules/bootstrap/scss/utilities/api';
 
 @import 'themes/generic';
 @import 'themes/general';
@@ -74,23 +67,12 @@
 @import 'themes/components/tabs';
 @import 'themes/components/form';
 
-@import 'themes/pages/authentication';
-@import 'themes/pages/maintaince';
-@import 'themes/pages/pages';
-@import 'themes/pages/icon-pages';
-@import 'themes/pages/user';
-@import 'themes/pages/application';
-@import 'themes/pages/admin';
+@import 'themes/pages_/authentication';
 
 @import 'themes/plugins/sweatalert';
-@import 'themes/plugins/lightbox';
 @import 'themes/plugins/notification';
 @import 'themes/plugins/modal';
-@import 'themes/plugins/rangeslider';
 @import 'themes/plugins/daterange';
 @import 'themes/plugins/tags-input';
-@import 'themes/plugins/slider';
 @import 'themes/plugins/switches';
 @import 'themes/plugins/data-tables';
-
-@import 'themes/layouts/customizer';

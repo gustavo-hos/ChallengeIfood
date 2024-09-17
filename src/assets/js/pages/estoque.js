@@ -1,122 +1,200 @@
 import 'reflect-metadata';
-import $ from 'jquery'
 import container from '../inversify/inversify.config';
 import TYPES from '../inversify/types';
-import { ROUTES, sleep } from '../util/util';
+
+import $ from 'jquery';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-bs5';
+
+import { DTTABLE_TEXTOS } from '../util/util';
+import { ESTOQUE, SUGESTOES_PRODUTOS } from '../mock-data';
 
 const _toasterService = container.get(TYPES.ToasterService);
 
-/* credenciais para simular autenticacao no banco de dados */
-const EMAIL = "admin@admin.com.br"
-const SENHA = "123456"
-
-const _foodImages = [
-    'banana.png', 
-    'broccoli.png', 
-    'burguer.png',
-    'cake.png',
-    'chicken.png',
-    'french-fries.png',
-    'hotdog.png',
-    'melon.png',
-    'pizza.png',
-    'ramen.png',
-    'sandwich.png',
-    'softdrink.png',
-    'sushi.png'
-];
-
-const _foodContainer = $('#falling-food-container');
-
-/* 
-    Disabilita botao de login e habilita spinner
-*/
-function _enableLoginButtonLoading() {
-    $("button#login").prop("disabled", true);
-    $("button#login .spinner-border").removeClass("d-none");
+function mostrarDetalhesProduto(produto) {
+  console.log(produto);
+  $('#produtoNome').text(produto.nome);
+  $('#produtoCategoria').text(produto.categoria);
+  $('#produtoQuantidade').text(produto.quantidade);
+  $('#produtoPrecoCusto').text(produto.precoCusto.toFixed(2));
+  $('#produtoPrecoVenda').text(produto.precoVenda.toFixed(2));
+  $('#produtoValidade').text(produto.validade);
+  $('#produtoImagem').attr('src', produto.imagem);
 }
 
-function _disableLoginButtonLoading() {
-    $("button#login .spinner-border").addClass("d-none");
-}
+let optionsConsumoPrevisto = {
+  chart: {
+    type: 'bar',
+    height: 350
+  },
+  series: [{
+    name: 'Consumo Previsto',
+    data: [30, 50, 40, 20, 15, 35, 25, 10, 40, 60]
+  }],
+  xaxis: {
+    categories: ['Tomate', 'Alface', 'Carne de Hambúrguer', 'Carne de Frango',
+      'Bacon', 'Queijo', 'Refrigerante Cola', 'Calabresa', 'Massa de Pizza',
+      'Brownie']
+  },
+  colors: ['#ea1d2c'],
+  fill: {
+    opacity: 1
+  }
+};
 
-/*
-    Funcao para criar comidinhas caindo
-    Obs: funcao simples, nao e performatica,
-    nao aplica algoritimos para distribuicao balanceada,
-    podendo ter espacos com muitos elementos, e outros sem nenhum.
-*/
-function _createFallingFood() {
-    const food = $('<img class="falling-food">');
-    const image = _foodImages[Math.floor(Math.random() * _foodImages.length)];
-    food.attr('src', `/assets/images/parallax/${image}`);
+let optionsReposicaoCategoria = {
+  chart: {
+    type: 'pie',
+    height: 350
+  },
+  series: [20, 30, 10, 40],
+  labels: ['Carnes', 'Hortifruti', 'Laticínios', 'Bebidas'],
+  colors: ['#ea1d2c', '#FF7D78', '#FFB2B0', '#FFC1A6'],
+  fill: {
+    opacity: 1
+  }
+};
 
-    const size = Math.random() * 60 + 60;
+let optionsNovosItens = {
+  chart: {
+    type: 'bar',
+    height: 350
+  },
+  series: [{
+    name: 'Estimativa de Consumo',
+    data: SUGESTOES_PRODUTOS.map(produto => produto.estimativaConsumo)
+  }],
+  xaxis: {
+    categories: SUGESTOES_PRODUTOS.map(produto => produto.nome)
+  },
+  colors: ['#ea1d2c'],
+  fill: {
+    opacity: 1
+  }
+};
 
-    food.css({
-        width: `${size}px`,
-        height: 'auto',
-        left: `${Math.random() * 100}vw`,
-        top: '-100px',
-        animationDuration: `${Math.random() * 5 + 5}s`,
-        transform: `rotate(${Math.random() * 360}deg)`
-    });
+let optionsFaltaEstoque = {
+  chart: {
+    type: 'bar',
+    height: 350
+  },
+  series: [{
+    name: 'Probabilidade de Ficar em Falta',
+    data: [90, 75, 50, 30, 20]
+  }],
+  xaxis: {
+    categories: ['Alface', 'Carne de Frango', 'Refrigerante Cola', 'Calabresa',
+      'Massa de Pizza']
+  },
+  colors: ['#ea1d2c'],
+  fill: {
+    opacity: 1
+  }
+};
 
-    _foodContainer.append(food);
+let optionsConsumoReposicao = {
+  chart: {
+    type: 'line',
+    height: 350
+  },
+  series: [{
+    name: 'Consumo',
+    data: [40, 30, 25, 50, 60]
+  }, {
+    name: 'Reposição',
+    data: [35, 25, 20, 45, 55]
+  }],
+  xaxis: {
+    categories: ['Tomate', 'Alface', 'Carne de Hambúrguer', 'Queijo', 'Bacon']
+  },
+  colors: ['#ea1d2c', '#FF7D78'],
+  fill: {
+    opacity: 1
+  }
+};
 
-    food.css({
-        animation: `fall linear ${Math.random() * 20 + 10}s infinite`
-    });
+let chartConsumoReposicao = new ApexCharts(
+  document.querySelector('#consumo-reposicao'), optionsConsumoReposicao);
+chartConsumoReposicao.render();
 
-    food.animate({
-        top: '110%'
-    }, Math.random() * 5e3 + 10e3, 'linear', function() {
-        $(this).remove();
-    });
-}
+let chartFaltaEstoque = new ApexCharts(document.querySelector('#falta-estoque'),
+  optionsFaltaEstoque);
+chartFaltaEstoque.render();
 
+let chartNovosItens = new ApexCharts(document.querySelector('#novos-itens'),
+  optionsNovosItens);
+chartNovosItens.render();
+
+let chartReposicaoCategoria = new ApexCharts(
+  document.querySelector('#reposicao-categoria'), optionsReposicaoCategoria);
+chartReposicaoCategoria.render();
+
+let chartConsumoPrevisto = new ApexCharts(
+  document.querySelector('#consumo-previsto'), optionsConsumoPrevisto);
+chartConsumoPrevisto.render();
 
 $(() => {
-    $("button#login").on("click", async () => {
-        let email = $("input#email").val();
-        let senha = $("input#password").val();
-        
-        if(!email || email !== EMAIL) {
-            _toasterService.alert("Email invalido.", 5);
-            return;
-        }
-        
-        if(!senha || senha !== SENHA){
-            _toasterService.alert("Senha invalida.", 5);
-            return;
-        }
-        
-        _enableLoginButtonLoading();
 
-        await sleep(3e3)
+  $('#tabela-estoque').dataTable({
+    data: ESTOQUE,
+    columns: [
+      { title: 'Cod.', data: 'cod', className: 'text-center' },
+      {
+        title: 'Nome',
+        data: 'nome',
+        render: (data, type, row) => {
+          return `
+            <a href="#" data-bs-toggle="modal" class="text-danger detalhes-produto-link" 
+            data-bs-target="#detalhesProdutoModal" data-produto='${JSON.stringify(
+            row)}'>${data}</a>`;
+        },
+        className: 'text-center'
+      },
+      { title: 'Categoria', data: 'categoria', className: 'text-center' },
+      {
+        title: 'Preço de Custo',
+        data: 'precoCusto',
+        className: 'text-center',
+        render: (data) => `R$ ${data.toFixed(2)}`
+      },
+      {
+        title: 'Preço de Venda',
+        data: 'precoVenda',
+        className: 'text-center',
+        render: (data) => `R$ ${data.toFixed(2)}`
+      },
+      { title: 'Qtd.', data: 'quantidade', className: 'text-center' },
+      {
+        title: 'Status',
+        data: 'status',
+        render: (data, type, row) => {
+          let badgeClass = 'bg-success';
+          if (row.quantidade < 10) {
+            badgeClass = 'bg-danger';
+          } else if (row.quantidade < 20) {
+            badgeClass = 'bg-warning';
+          }
+          return `<span class="badge ${badgeClass}">${data}</span>`;
+        },
+        className: 'text-center'
+      },
+      {
+        title: 'Ações',
+        data: null,
+        render: (data, type, row) => {
+          return `<button class="btn btn-sm btn-outline-danger"><i class="ph ph-shopping-cart"></i> Solicitar Reabastecimento</button>`;
+        },
+        className: 'text-center'
+      }
+    ],
+    order: [[6, 'asc']],
+    responsive: true,
+    language: DTTABLE_TEXTOS
+  });
 
-        _toasterService.success("Autenticado com Sucesso!", 5);
-        
-        _disableLoginButtonLoading();
-
-        await sleep(1e3);
-
-        window.location.href = ROUTES.DASHBOARD;
-    });
-
-    setInterval(_createFallingFood, 250);
-
-    $('<style>')
-        .prop('type', 'text/css')
-        .html(`
-            @keyframes fall {
-                0% {
-                    transform: translateY(0) rotate(0deg);
-                }
-                100% {
-                    transform: translateY(100vh) rotate(${Math.random() * 360}deg);
-                }
-            }
-        `)
-        .appendTo('head');
+  $(document).on('click', '.detalhes-produto-link', function(e) {
+    e.preventDefault();
+    const produto = JSON.parse($(this).attr('data-produto'));
+    mostrarDetalhesProduto(produto);
+  });
 });

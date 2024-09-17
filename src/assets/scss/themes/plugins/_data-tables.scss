@@ -279,7 +279,7 @@ table.dataTable tbody > tr.selected th.select-checkbox:after {
 
     &:hover {
       background-color: var(--bs-primary-light);
-      color: var(--bs-primary);
+      color: var(--bs-darkred);
     }
   }
 
@@ -290,7 +290,7 @@ table.dataTable tbody > tr.selected th.select-checkbox:after {
 
     &:focus,
     &:hover {
-      background-color: var(--bs-primary);
+      background-color: var(--bs-darkred);
       color: #fff;
       cursor: default;
     }
@@ -634,22 +634,22 @@ table.dataTable tbody > tr.selected th.select-checkbox:after {
     position: relative;
     text-decoration: none;
     border-radius: var(--bs-border-radius);
-    color: var(--bs-card-color);
+    color: var(--bs-darkred);
 
     &:hover {
       background-color: var(--bs-primary-light);
-      color: var(--bs-primary);
+      color: var(--bs-darkred);
     }
   }
   .datatable-active a,
   .active a {
-    background-color: var(--bs-primary);
+    background-color: var(--bs-darkred);
     color: #fff;
     cursor: default;
 
     &:focus,
     &:hover {
-      background-color: var(--bs-primary);
+      background-color: var(--bs-darkred);
       color: #fff;
       cursor: default;
     }

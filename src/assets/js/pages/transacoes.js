@@ -1,122 +1,242 @@
 import 'reflect-metadata';
-import $ from 'jquery'
+import $ from 'jquery';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-bs5';
+import 'overlayscrollbars/styles/overlayscrollbars.css';
+import { OverlayScrollbars } from 'overlayscrollbars';
+import 'bootstrap-daterangepicker/daterangepicker.css';
+import 'bootstrap-daterangepicker/daterangepicker.js';
+
 import container from '../inversify/inversify.config';
 import TYPES from '../inversify/types';
-import { ROUTES, sleep } from '../util/util';
+import {
+  DTTABLE_TEXTOS,
+  formatNumeroBR,
+  RANGEPICKER_TEXTOS
+} from '../util/util';
+import {
+  CANAIS_VENDA,
+  DADOS_RECEBIVEIS,
+  OPERACOES_CAIXA,
+  PEDIDOS_PAGAMENTO,
+  RECEITAS_ORIGEM
+} from '../mock-data';
+import moment from 'moment/moment';
 
 const _toasterService = container.get(TYPES.ToasterService);
 
-/* credenciais para simular autenticacao no banco de dados */
-const EMAIL = "admin@admin.com.br"
-const SENHA = "123456"
+const optionsPagamentos = {
+  chart: {
+    type: 'pie',
+    height: 350,
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 1000
+    }
+  },
+  series: PEDIDOS_PAGAMENTO.map(pagamento => pagamento.quantidade),
+  labels: PEDIDOS_PAGAMENTO.map(pagamento => pagamento.metodo),
+  colors: ['#ea1d2c', '#FF7D78', '#FFB2B0', '#FFC1A6', '#FFE4C7'],
+  fill: {
+    opacity: 1
+  },
+  legend: {
+    position: 'bottom'
+  },
+  responsive: [{
+    breakpoint: 480,
+    options: {
+      chart: {
+        width: 300
+      },
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }],
+  tooltip: {
+    y: {
+      formatter: function(value) {
+        return value + ' pedidos';
+      }
+    }
+  }
+};
 
-const _foodImages = [
-    'banana.png', 
-    'broccoli.png', 
-    'burguer.png',
-    'cake.png',
-    'chicken.png',
-    'french-fries.png',
-    'hotdog.png',
-    'melon.png',
-    'pizza.png',
-    'ramen.png',
-    'sandwich.png',
-    'softdrink.png',
-    'sushi.png'
-];
+const optionsReceitasOrigem = {
+  chart: {
+    type: 'pie',
+    height: 350,
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 1000
+    }
+  },
+  series: RECEITAS_ORIGEM.map(receita => receita.quantidade),
+  labels: RECEITAS_ORIGEM.map(receita => receita.origem),
+  colors: ['#ea1d2c', '#FF7D78', '#FFB2B0', '#FFC1A6'],
+  fill: {
+    opacity: 1
+  },
+  legend: {
+    position: 'bottom'
+  },
+  tooltip: {
+    y: {
+      formatter: function(value) {
+        return value + ' pedidos';
+      }
+    }
+  }
+};
 
-const _foodContainer = $('#falling-food-container');
+const optionsCanaisVenda = {
+  chart: {
+    type: 'pie',
+    height: 350,
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 1000
+    }
+  },
+  series: CANAIS_VENDA.map(venda => venda.quantidade),
+  labels: CANAIS_VENDA.map(venda => venda.canal),
+  colors: ['#ea1d2c', '#FF7D78', '#FFB2B0', '#FFC1A6'],
+  fill: {
+    opacity: 1
+  },
+  legend: {
+    position: 'bottom'
+  },
+  tooltip: {
+    y: {
+      formatter: function(value) {
+        return value + ' vendas';
+      }
+    }
+  }
+};
 
-/* 
-    Disabilita botao de login e habilita spinner
-*/
-function _enableLoginButtonLoading() {
-    $("button#login").prop("disabled", true);
-    $("button#login .spinner-border").removeClass("d-none");
-}
+let chartCanaisVenda = new ApexCharts(
+  document.querySelector('#grafico-canais-venda'), optionsCanaisVenda);
+let chartReceitasOrigem = new ApexCharts(
+  document.querySelector('#grafico-receitas-origem'), optionsReceitasOrigem);
+let chartPagamentos = new ApexCharts(
+  document.querySelector('#grafico-pagamentos'), optionsPagamentos);
 
-function _disableLoginButtonLoading() {
-    $("button#login .spinner-border").addClass("d-none");
-}
+chartCanaisVenda.render();
+chartReceitasOrigem.render();
+chartPagamentos.render();
 
-/*
-    Funcao para criar comidinhas caindo
-    Obs: funcao simples, nao e performatica,
-    nao aplica algoritimos para distribuicao balanceada,
-    podendo ter espacos com muitos elementos, e outros sem nenhum.
-*/
-function _createFallingFood() {
-    const food = $('<img class="falling-food">');
-    const image = _foodImages[Math.floor(Math.random() * _foodImages.length)];
-    food.attr('src', `/assets/images/parallax/${image}`);
+const setupFluxoCaixa = () => {
+  const operacoesCaixa = OPERACOES_CAIXA;
+  const listGroup = $('#operacoes-caixa');
 
-    const size = Math.random() * 60 + 60;
+  operacoesCaixa.forEach(operacao => {
+    listGroup.append(`
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <p class="mb-0 ${operacao.cor}">${operacao.tipo}</p>
+          <small>${operacao.data} | Operador: ${operacao.operador}</small>
+          <br />
+          <small>Método de Pagamento: ${operacao.metodoPagamento}</small>
+        </div>
+        <span class="badge ${operacao.cor}">${operacao.valor}</span>
+      </div>
+    `);
+  });
 
-    food.css({
-        width: `${size}px`,
-        height: 'auto',
-        left: `${Math.random() * 100}vw`,
-        top: '-100px',
-        animationDuration: `${Math.random() * 5 + 5}s`,
-        transform: `rotate(${Math.random() * 360}deg)`
-    });
-
-    _foodContainer.append(food);
-
-    food.css({
-        animation: `fall linear ${Math.random() * 20 + 10}s infinite`
-    });
-
-    food.animate({
-        top: '110%'
-    }, Math.random() * 5e3 + 10e3, 'linear', function() {
-        $(this).remove();
-    });
-}
-
+  OverlayScrollbars(document.querySelector('.list-group'), {
+    className: 'os-theme-dark',
+    sizeAutoCapable: true,
+    paddingAbsolute: true,
+    scrollbars: {
+      visibility: 'auto',
+      autoHide: 'leave',
+      autoHideDelay: 800,
+      dragScrolling: true,
+      clickScrolling: true,
+      touchSupport: true
+    }
+  });
+};
 
 $(() => {
-    $("button#login").on("click", async () => {
-        let email = $("input#email").val();
-        let senha = $("input#password").val();
-        
-        if(!email || email !== EMAIL) {
-            _toasterService.alert("Email invalido.", 5);
-            return;
+
+  $('#total-entrada').text(formatNumeroBR((Math.random() * 5555.55)));
+  $('#total-saida').text(formatNumeroBR((Math.random() * 5555.55)));
+  $('#saldo-atual').text(formatNumeroBR((Math.random() * 5555.55)));
+  $('#despesas-previstas').text(formatNumeroBR((Math.random() * 5555.55)));
+
+  setupFluxoCaixa();
+
+  $('#periodo-datepicker').daterangepicker({
+    timePicker: true,
+    timePicker24Hour: true,
+    timePickerSeconds: true,
+    startDate: moment().startOf('day'),
+    endDate: moment().endOf('day'),
+    locale: RANGEPICKER_TEXTOS
+  }, function(start, end) {
+    $('#vendas-dia-datepicker').val(
+      start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format(
+        'YYYY-MM-DD HH:mm:ss')
+    );
+  });
+
+  $('#tabela-transacoes').dataTable({
+    data: DADOS_RECEBIVEIS,
+    columns: [
+      { title: 'Cod.', data: 'cod', className: 'text-center' },
+      {
+        title: 'Tipo de Transação',
+        data: 'tipoTransacao',
+        className: 'text-center'
+      },
+      { title: 'Descrição', data: 'descricao' },
+      { title: 'Categoria', data: 'categoria', className: 'text-center' },
+      {
+        title: 'Valor',
+        data: 'valor',
+        className: 'text-center',
+        render: (data) => `R$ ${data.toFixed(2)}`
+      },
+      {
+        title: 'Data', data: 'data', className: 'text-center',
+        render: (data) => {
+          if (data) {
+            let date = new Date(data);
+            return ('0' + date.getDate()).slice(-2) + '/' + ('0'
+              + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear();
+          }
+          return data;
         }
-        
-        if(!senha || senha !== SENHA){
-            _toasterService.alert("Senha invalida.", 5);
-            return;
+      },
+      {
+        title: 'Status',
+        data: 'status',
+        className: 'text-center',
+        render: (data) => {
+          if (data === 'Pago') {
+            return `<span class="badge bg-success">${data}</span>`;
+          } else if (data === 'Pendente') {
+            return `<span class="badge bg-warning">${data}</span>`;
+          } else {
+            return `<span class="badge bg-danger">${data}</span>`;
+          }
         }
-        
-        _enableLoginButtonLoading();
-
-        await sleep(3e3)
-
-        _toasterService.success("Autenticado com Sucesso!", 5);
-        
-        _disableLoginButtonLoading();
-
-        await sleep(1e3);
-
-        window.location.href = ROUTES.DASHBOARD;
-    });
-
-    setInterval(_createFallingFood, 250);
-
-    $('<style>')
-        .prop('type', 'text/css')
-        .html(`
-            @keyframes fall {
-                0% {
-                    transform: translateY(0) rotate(0deg);
-                }
-                100% {
-                    transform: translateY(100vh) rotate(${Math.random() * 360}deg);
-                }
-            }
-        `)
-        .appendTo('head');
+      },
+      {
+        title: 'Tipo de Pagamento',
+        data: 'tipoPagamento',
+        className: 'text-center'
+      },
+      { title: 'Observações', data: 'observacoes' }
+    ],
+    responsive: true,
+    language: DTTABLE_TEXTOS
+  });
 });
